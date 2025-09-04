@@ -20,8 +20,18 @@ dependencies = [
 [uv.tool]
 package = true
 
-[build-system]
-# Use uv's built-in backend
-requires = ["uv>=0.4"]
-build-backend = "uv"
 
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools]
+packages = ["RETFound",  "util"]
+
+# List every top-level .py you want installed (without .py extension)
+py-modules = [
+  "models_vit",
+  "engine_finetune",
+  "main_finetune"
+]

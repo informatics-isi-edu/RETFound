@@ -13,8 +13,8 @@ from sklearn.metrics import (
     hamming_loss, jaccard_score, recall_score, precision_score, cohen_kappa_score
 )
 from pycm import ConfusionMatrix
-import RETFound.util.misc as misc
-import RETFound.util.lr_sched as lr_sched
+import util.misc as misc
+import util.lr_sched as lr_sched
 
 def train_one_epoch(
     model: torch.nn.Module,
