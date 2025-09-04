@@ -82,7 +82,7 @@ def train_one_epoch(
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
 @torch.no_grad()
-def evaluate(data_loader, model, device, args, epoch, mode, num_class, log_writer):
+def evaluate(data_loader, model, device: torch.device, args, epoch, mode, num_class, log_writer):
     """Evaluate the model."""
     criterion = nn.CrossEntropyLoss()
     metric_logger = misc.MetricLogger(delimiter="  ")
@@ -107,7 +107,9 @@ def evaluate(data_loader, model, device, args, epoch, mode, num_class, log_write
         pred_onehot.extend(output_onehot.detach().cpu().numpy())
         true_labels.extend(target.cpu().numpy())
         pred_labels.extend(output_label.detach().cpu().numpy())
-        pred_softmax.extend(output_.detach().cpu().numpy())
+        # pred_softmax.extend(output_.detach().cpu().numpy())
+        pred_softmax.extend(output_.detach().to(torch.float32).cpu().numpy())
+
     
     accuracy = accuracy_score(true_labels, pred_labels)
     hamming = hamming_loss(true_onehot, pred_onehot)
