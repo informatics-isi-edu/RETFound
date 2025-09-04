@@ -77,7 +77,7 @@ def train_one_epoch(
             log_writer.add_scalar('loss/train', loss_value_reduce, epoch_1000x)
             log_writer.add_scalar('lr', max_lr, epoch_1000x)
     
-    metric_logger.synchronize_between_processes()
+    metric_logger.synchronize_between_processes(device)
     print("Averaged stats:", metric_logger)
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
