@@ -5,7 +5,7 @@ import sys
 
 import models_vit
 import engine_finetune
-import main_finetune
+from main_finetune import main, get_args_parser
 
 _modules = [
     "models_vit",
@@ -19,4 +19,4 @@ for name in _modules:
     globals()[name] = mod                        # make it available as RETFound.<name>
     sys.modules[f"{__name__}.{name}"] = mod      # <-- critical: register as a submodule
 
-__all__ = _modules
+__all__ = ["main", "get_args_parser"]
