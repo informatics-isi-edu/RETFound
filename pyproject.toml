@@ -18,6 +18,7 @@ dependencies = [
 ]
 
 [uv.tool]
+package = true
 
 [tool.setuptools]
 packages = ["RETFound"]
