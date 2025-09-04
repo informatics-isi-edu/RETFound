@@ -47,7 +47,7 @@ def train_one_epoch(
         if mixup_fn:
             samples, targets = mixup_fn(samples, targets)
         
-        with torch.cuda.amp.autocast():
+        with torch.amp.autocast(device.type):
             outputs = model(samples)
             loss = criterion(outputs, targets)
         loss_value = loss.item()
@@ -95,7 +95,7 @@ def evaluate(data_loader, model, device, args, epoch, mode, num_class, log_write
         images, target = batch[0].to(device, non_blocking=True), batch[-1].to(device, non_blocking=True)
         target_onehot = F.one_hot(target.to(torch.int64), num_classes=num_class)
         
-        with torch.cuda.amp.autocast():
+        with torch.amp.autocast(device.type):
             output = model(images)
             loss = criterion(output, target)
         output_ = nn.Softmax(dim=1)(output)
