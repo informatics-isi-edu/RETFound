@@ -6,6 +6,7 @@ import sys
 import models_vit
 import engine_finetune
 from main_finetune import main, get_args_parser
+import util as _util
 
 _modules = [
     "models_vit",
@@ -13,6 +14,10 @@ _modules = [
     "main_finetune",
     # add any other root-level .py you want to expose
 ]
+
+
+globals()["util"] = _util                     # attribute access: RETFound.util
+sys.modules[f"{__name__}.util"] = _util   
 
 for name in _modules:
     mod = import_module(name)                    # load the root-level module
