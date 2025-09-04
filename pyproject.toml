@@ -20,7 +20,8 @@ dependencies = [
 [uv.tool]
 package = true
 
-[tool.setuptools]
-packages = ["RETFound"]
-py-modules = ["models_vit", "engine_finetune", "main_finetune"]
+[build-system]
+# Use uv's built-in backend
+requires = ["uv>=0.4"]
+build-backend = "uv"
 
