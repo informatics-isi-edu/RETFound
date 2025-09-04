@@ -21,11 +21,11 @@ from huggingface_hub import hf_hub_download, login  # login imported as in origi
 
 # =========================
 import models_vit as models
-import util.lr_decay as lrd
-import util.misc as misc
-from util.datasets import build_dataset
-from util.pos_embed import interpolate_pos_embed
-from util.misc import NativeScalerWithGradNormCount as NativeScaler
+import RETFound.util.lr_decay as lrd
+import RETFound.util.misc as misc
+from RETFound.util.datasets import build_dataset
+from RETFound.util.pos_embed import interpolate_pos_embed
+from RETFound.util.misc import NativeScalerWithGradNormCount as NativeScaler
 from engine_finetune import train_one_epoch, evaluate
 
 # =========================
