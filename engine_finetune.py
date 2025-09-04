@@ -130,7 +130,7 @@ def evaluate(data_loader, model, device, args, epoch, mode, num_class, log_write
           f' Jaccard Score: {jaccard:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f},\n'
           f' Average Precision: {average_precision:.4f}, Kappa: {kappa:.4f}, Score: {score:.4f}')
     
-    metric_logger.synchronize_between_processes()
+    metric_logger.synchronize_between_processes(device)
     
     results_path = os.path.join(args.output_dir, args.task, f'metrics_{mode}.csv')
     file_exists = os.path.isfile(results_path)
