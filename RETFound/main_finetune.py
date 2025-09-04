@@ -20,13 +20,13 @@ from timm.data.mixup import Mixup
 from huggingface_hub import hf_hub_download, login  # login imported as in original
 
 # =========================
-import models_vit as models
+import RETFound.models_vit as models
 import RETFound.util.lr_decay as lrd
 import RETFound.util.misc as misc
 from RETFound.util.datasets import build_dataset
 from RETFound.util.pos_embed import interpolate_pos_embed
 from RETFound.util.misc import NativeScalerWithGradNormCount as NativeScaler
-from engine_finetune import train_one_epoch, evaluate
+from RETFound.engine_finetune import train_one_epoch, evaluate
 
 # =========================
 faulthandler.enable()
