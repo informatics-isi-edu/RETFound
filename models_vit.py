@@ -50,7 +50,11 @@ def RETFound_mae(**kwargs):
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return model
 
-
+def RETFound_backbone(**kwargs):
+    model = VisionTransformer(
+        patch_size=16, embed_dim=128, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
+    return model
 
 def Dinov2(args, **kwargs):
     
@@ -102,4 +106,51 @@ def Dinov3(args, **kwargs):
     if model.head.bias is not None:
         nn.init.zeros_(model.head.bias)
 
+    return model
+
+class MultiModalNeuralNetwork(nn.Module):
+    
+    def __init__(self,img_encoder,modality,num_classes,hidden_dim,inter_dim):
+        super().__init__()
+        self.img_encoder = img_encoder
+        embed_dim = img_encoder.embed_dim
+        self.structured = nn.Sequential(
+            nn.Linear(modality,hidden_dim),
+            nn.ReLU(inplace=True),
+            nn.LayerNorm(hidden_dim),
+            nn.Dropout(0.1)
+        )
+        
+        self.fusion = nn.Sequential(
+            nn.LayerNorm(embed_dim + hidden_dim),
+            nn.Linear(embed_dim+hidden_dim,inter_dim),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.1),
+            nn.Linear(inter_dim,num_classes)
+        )
+        
+    def forward(self, img, clinical):
+        img_emb = self.img_encoder(img)          
+        clin_emb = self.structured(clinical)  
+        combined = torch.cat([img_emb, clin_emb], dim=-1)  
+        out = self.fusion(combined)
+        return out
+
+def MultiRETFound_mae(modality, num_classes,hidden_dim, inter_dim, **kwargs):
+    if "global_pool" in kwargs:
+        kwargs.pop("global_pool")
+    if "num_classes" in kwargs:
+        kwargs.pop("num_classes")
+    vit_encoder = RETFound_mae(num_classes = 0, global_pool = True, **kwargs)
+    model = MultiModalNeuralNetwork(img_encoder = vit_encoder,modality = modality, num_classes = num_classes,
+                                  hidden_dim = hidden_dim, inter_dim = inter_dim)
+    return model
+
+    
+def RETFound_reg(**kwargs):
+    if "global_pool" in kwargs:
+        kwargs.pop("global_pool")
+    if "num_classes" in kwargs:
+        kwargs.pop("num_classes")
+    model = RETFound_backbone(num_classes = 0, global_pool = True, **kwargs)
     return model
